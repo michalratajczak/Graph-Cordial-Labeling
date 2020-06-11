@@ -254,7 +254,7 @@ namespace CordialLabeling.Core
 
         public void UpdateVerticesLabel()
         {
-            var data = File.ReadAllText("output.txt");
+            var data = File.ReadAllText("Temp\\output.txt");
             Regex regex = new Regex(@"(\d)");
             var matches = regex.Matches(data).ToArray();
 
@@ -279,10 +279,10 @@ namespace CordialLabeling.Core
 
             builder.Append($"|];");
 
-            File.WriteAllText("data.dzn", builder.ToString());
+            File.WriteAllText("Temp\\data.dzn", builder.ToString());
         }
 
-        public void ExportToGraphvizFile()
+        public void ExportToGraphvizFileWithLabels()
         {
             StringBuilder s = new StringBuilder();
             s.AppendLine("// Cordial Labeling");
@@ -297,7 +297,25 @@ namespace CordialLabeling.Core
             }
             s.AppendLine("}");
 
-            File.WriteAllText("graph.gv", s.ToString());
+            File.WriteAllText("Temp\\graph.gv", s.ToString());
+        }
+
+        public void ExportToGraphvizFile()
+        {
+            StringBuilder s = new StringBuilder();
+            s.AppendLine("// Cordial Labeling");
+            s.AppendLine("graph {");
+            foreach (var v in Vertices)
+            {
+                s.AppendLine($"\t{v.Index} [label=\"[{v.Index}]\"]");
+            }
+            foreach (var e in Edges)
+            {
+                s.AppendLine($"\t{e.A.Index} -- {e.B.Index}");
+            }
+            s.AppendLine("}");
+
+            File.WriteAllText("Temp\\graph.gv", s.ToString());
         }
 
         public string ExecuteMiniZinc()
@@ -307,7 +325,7 @@ namespace CordialLabeling.Core
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = ".\\MiniZinc\\minizinc.exe",
-                    Arguments = "--solver Gecode .\\CordialLabelingWithParameters.mzn .\\data.dzn",
+                    Arguments = "--solver Gecode .\\Model\\CordialLabeling.mzn .\\Temp\\data.dzn",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true
@@ -316,6 +334,13 @@ namespace CordialLabeling.Core
 
             proc.Start();
             string result = proc.StandardOutput.ReadLine();
+
+            if(String.IsNullOrEmpty(result))
+            {
+                throw new Exception("Can't solve!");
+            }
+
+            File.WriteAllText("Temp\\output.txt", result);
             proc.WaitForExit();
             proc.Close();
 
@@ -328,8 +353,8 @@ namespace CordialLabeling.Core
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = ".\\Graphviz2.38\\bin\\dot.exe",
-                    Arguments = "-Tpng .\\graph.gv -o .\\graph.png",
+                    FileName = ".\\Graphviz\\bin\\dot.exe",
+                    Arguments = "-Tpng .\\Temp\\graph.gv -o .\\Result\\graph.png",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true

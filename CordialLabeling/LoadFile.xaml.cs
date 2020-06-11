@@ -37,6 +37,7 @@ namespace CordialLabeling
             {
                 Graph = Graph.ReadFromMatrixFile(openFileDialog.FileName);
             }
+            Close();
         }
 
         private void LoadMinizinc_Click(object sender, RoutedEventArgs e)
@@ -47,6 +48,7 @@ namespace CordialLabeling
             {
                 Graph = Graph.ReadFromMiniZincFile(openFileDialog.FileName);
             }
+            Close();
         }
 
     }

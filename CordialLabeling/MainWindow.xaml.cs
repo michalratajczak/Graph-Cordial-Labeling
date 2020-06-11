@@ -1,6 +1,8 @@
 ﻿using CordialLabeling.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,27 +34,56 @@ namespace CordialLabeling
         private void GenerateNew_Click(object sender, RoutedEventArgs e)
         {
             var genNew = new GenerateNew();
-            genNew.Show();
+            genNew.ShowDialog();
             if (genNew.Graph != null)
             {
                 Graph = genNew.Graph;
+                DisplayGraph();
             }
         }
 
         private void LoadFile_Click(object sender, RoutedEventArgs e)
         {
             var loadFile = new LoadFile();
-            loadFile.Show();
+            loadFile.ShowDialog();
             if(loadFile.Graph != null)
             {
                 Graph = loadFile.Graph;
+                DisplayGraph();
             }
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
+        public void DisplayGraph()
+        {
+            OpenGraph.IsEnabled = false;
+            try
+            {
+                Graph.ExportToMiniZincFile();
+                Graph.ExecuteMiniZinc();
+                Graph.UpdateVerticesLabel();
+                Graph.ExportToGraphvizFileWithLabels();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+                Graph.ExportToGraphvizFile();
+            }
+
+            Graph.ExecuteGraphviz();
+            FileInfo fileInfo = new FileInfo("Result\\graph.png");
+            Image.Source = new BitmapImage(new Uri(fileInfo.FullName));
+            OpenGraph.IsEnabled = true;
+
+        }
+
+        private void OpenGraph_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", Environment.CurrentDirectory + "\\Result");
+        }
     }
 }
