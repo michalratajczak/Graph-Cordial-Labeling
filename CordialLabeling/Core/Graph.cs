@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace CordialLabeling.Core
 {
@@ -268,6 +269,28 @@ namespace CordialLabeling.Core
             s.AppendLine("}");
 
             File.WriteAllText("graph.gv", s.ToString());
+        }
+
+        public string ExecuteMiniZinc()
+        {
+            var proc = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = ".\\MiniZinc\\minizinc.exe",
+                    Arguments = "--solver Gecode .\\CordialLabelingWithParameters.mzn .\\data.dzn",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            };
+
+            proc.Start();
+            string result = proc.StandardOutput.ReadLine();
+            proc.WaitForExit();
+            proc.Close();
+
+            return result;
         }
     }
 }
