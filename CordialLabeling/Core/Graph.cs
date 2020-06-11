@@ -29,6 +29,9 @@ namespace CordialLabeling.Core
             {
                 Vertices.Add(new Vertex(i));
             }
+
+            CalculateVertices();
+            CalculateEdges();
         }
 
         private Graph(int n)
@@ -180,6 +183,36 @@ namespace CordialLabeling.Core
             return graph;
         }
 
+        public static Graph ReadFromMatrix(int[][] adjacencyMatrix)
+        {
+            int n = adjacencyMatrix.Length;
+            int k = 0;
+            for(int i = 0; i < n; i++)
+            {
+                for(int j = i; j < n; j++)
+                {
+                    k += adjacencyMatrix[i][j];
+                }
+            }
+
+            return new Graph(n, k, adjacencyMatrix);
+        }
+
+        public static Graph ReadFromMatrixFile(string fileName)
+        {
+            var data = File.ReadAllLines(fileName);
+
+            Regex regex = new Regex(@"(\d)");
+            var matches = new Match[data.Length][];
+
+            for(int i = 0; i < data.Length; i++)
+            {
+                matches[i] = regex.Matches(data[i]).ToArray();
+            }
+
+            return ReadFromMatrix(matches.Select(m => m.Select(e => int.Parse(e.Value)).ToArray()).ToArray());
+        }
+
         public void UpdateVerticesLabel(int[] labels)
         {
             for(int i = 0; i < labels.Length; i++)
@@ -219,6 +252,22 @@ namespace CordialLabeling.Core
             File.WriteAllText("data.dzn", builder.ToString());
         }
 
-        
+        public void ExportToGraphvizFile()
+        {
+            StringBuilder s = new StringBuilder();
+            s.AppendLine("// Cordial Labeling");
+            s.AppendLine("graph {");
+            foreach(var v in Vertices)
+            {
+                s.AppendLine($"\t{v.Index} [label=\"[{v.Index}]: {v.Label}\"]");
+            }
+            foreach(var e in Edges)
+            {
+                s.AppendLine($"\t{e.A.Index} -- {e.B.Index} [label={e.Label} constraint=true]");
+            }
+            s.AppendLine("}");
+
+            File.WriteAllText("graph.gv", s.ToString());
+        }
     }
 }
