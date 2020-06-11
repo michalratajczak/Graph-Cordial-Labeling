@@ -27,7 +27,7 @@
             Grid.Column="0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Text="Number of edges:" />
+            Text="Number of vertices:" />
 
         <TextBox
             Name="asd"
@@ -35,7 +35,8 @@
             Grid.Column="1"
             Width="75"
             Height="20"
-            HorizontalAlignment="Left" />
+            HorizontalAlignment="Left"
+            Text="{Binding N}" />
 
         <GridSplitter
             Grid.Row="1"
@@ -59,7 +60,8 @@
             Height="20"
             Margin="0,0,15,0"
             HorizontalAlignment="Right"
-            VerticalAlignment="Center" />
+            VerticalAlignment="Center"
+            Text="{Binding P}" />
 
         <Button
             Grid.Row="3"
@@ -74,7 +76,7 @@
             Grid.Column="1"
             Margin="5,0,0,0"
             VerticalAlignment="Center"
-            Text="Number of vertices:" />
+            Text="Number of edges:" />
 
         <GridSplitter
             Grid.Row="2"
@@ -90,7 +92,8 @@
             Height="20"
             Margin="0,0,15,0"
             HorizontalAlignment="Right"
-            VerticalAlignment="Center" />
+            VerticalAlignment="Center"
+            Text="{Binding K}" />
 
         <Button
             Grid.Row="3"

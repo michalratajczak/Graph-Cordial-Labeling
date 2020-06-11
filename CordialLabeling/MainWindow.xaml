@@ -49,6 +49,7 @@
             Content="Exit" />
 
         <Image
+            x:Name="Image"
             Grid.Row="0"
             Grid.RowSpan="5"
             Grid.Column="1"

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CordialLabeling.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,20 +18,30 @@ namespace CordialLabeling
     /// </summary>
     public partial class GenerateNew : Window
     {
+        public bool IsConnected { get; set; }
+        public int N { get; set; }
+        public double P { get; set; }
+        public int K { get; set; }
+
+        public Graph Graph { get; set; }
+
         public GenerateNew()
         {
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
+            DataContext = this;
         }
 
         private void Gnp_Click(object sender, RoutedEventArgs e)
         {
-
+            Graph = Graph.Generate(N, P, IsConnected);
+            Close();
         }
 
         private void Gnk_Click(object sender, RoutedEventArgs e)
         {
-
+            Graph = Graph.Generate(N, K, IsConnected);
+            Close();
         }
     }
 }

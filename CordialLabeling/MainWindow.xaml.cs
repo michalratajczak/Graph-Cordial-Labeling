@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CordialLabeling.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ namespace CordialLabeling
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Graph Graph { get; set; }
+
         public MainWindow()
         {
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
@@ -30,17 +33,26 @@ namespace CordialLabeling
         {
             var genNew = new GenerateNew();
             genNew.Show();
+            if (genNew.Graph != null)
+            {
+                Graph = genNew.Graph;
+            }
         }
 
         private void LoadFile_Click(object sender, RoutedEventArgs e)
         {
             var loadFile = new LoadFile();
             loadFile.Show();
+            if(loadFile.Graph != null)
+            {
+                Graph = loadFile.Graph;
+            }
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
+
     }
 }

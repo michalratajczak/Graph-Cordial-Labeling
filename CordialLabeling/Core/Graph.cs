@@ -183,6 +183,36 @@ namespace CordialLabeling.Core
             return graph;
         }
 
+        public static Graph ReadFromMiniZincFile(string fileName)
+        {
+            var data = File.ReadAllText(fileName);
+            Regex regex_n = new Regex(@"n = (\d+);");
+            Regex regex_k = new Regex(@"k = (\d+);");
+            int.TryParse(regex_n.Match(data).Groups[1].Value, out var n);
+            int.TryParse(regex_k.Match(data).Groups[1].Value, out var k);
+            Regex regex_edges = new Regex(@"edges = \[((\|\d+,\d+){" + k + @"}\|)\];");
+
+            var edges = regex_edges
+                .Match(data).Groups[1].Value.Split('|',StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Split(',').Select(e => int.Parse(e) - 1).ToArray())
+                .ToArray();
+
+            int[][] adjacencyMatrix = new int[n][];
+
+            for(int i = 0; i < n; i++)
+            {
+                adjacencyMatrix[i] = new int[n];
+            }
+
+            foreach(var e in edges)
+            {
+                adjacencyMatrix[e[0]][e[1]] = 1;
+                adjacencyMatrix[e[1]][e[0]] = 1;
+            }
+
+            return new Graph(n, k, adjacencyMatrix);
+        }
+
         public static Graph ReadFromMatrix(int[][] adjacencyMatrix)
         {
             int n = adjacencyMatrix.Length;
@@ -230,7 +260,6 @@ namespace CordialLabeling.Core
             for(int i = 0; i < Vertices.Count; i++)
             {
                 Vertices[i].Label = int.Parse(matches[i].Value);
-                Debug.WriteLine(matches[i].Value);
             }           
         }
 

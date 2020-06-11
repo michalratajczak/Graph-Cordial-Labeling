@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using CordialLabeling.Core;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,21 +21,12 @@ namespace CordialLabeling
     /// </summary>
     public partial class LoadFile : Window
     {
+        public Graph Graph { get; set; }
+
         public LoadFile()
         {
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
-        }
-
-        private void LoadGV_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "GraphViz Files (*.gv)|*.gv|Text files (*.txt)|*.txt";
-            if (openFileDialog.ShowDialog() == true)
-            {
-                Debug.WriteLine(openFileDialog.FileName);
-                //File.ReadAllText(openFileDialog.FileName)
-            }
         }
 
         private void LoadMatrix_Click(object sender, RoutedEventArgs e)
@@ -43,8 +35,7 @@ namespace CordialLabeling
             openFileDialog.Filter = "Text files (*.txt)|*.txt";
             if (openFileDialog.ShowDialog() == true)
             {
-                Debug.WriteLine(openFileDialog.FileName);
-                //File.ReadAllText(openFileDialog.FileName)
+                Graph = Graph.ReadFromMatrixFile(openFileDialog.FileName);
             }
         }
 
@@ -54,8 +45,7 @@ namespace CordialLabeling
             openFileDialog.Filter = "MiniZinc Files (*.dzn)|*.dzn|Text files (*.txt)|*.txt";
             if (openFileDialog.ShowDialog() == true)
             {
-                Debug.WriteLine(openFileDialog.FileName);
-                //File.ReadAllText(openFileDialog.FileName)
+                Graph = Graph.ReadFromMiniZincFile(openFileDialog.FileName);
             }
         }
 
