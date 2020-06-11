@@ -22,7 +22,25 @@ namespace CordialLabeling
     {
         public MainWindow()
         {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
+        }
+
+        private void GenerateNew_Click(object sender, RoutedEventArgs e)
+        {
+            var genNew = new GenerateNew();
+            genNew.Show();
+        }
+
+        private void LoadFile_Click(object sender, RoutedEventArgs e)
+        {
+            var loadFile = new LoadFile();
+            loadFile.Show();
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
