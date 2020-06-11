@@ -292,5 +292,24 @@ namespace CordialLabeling.Core
 
             return result;
         }
+
+        public void ExecuteGraphviz()
+        {
+            var proc = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = ".\\Graphviz2.38\\bin\\dot.exe",
+                    Arguments = "-Tpng .\\graph.gv -o .\\graph.png",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            };
+
+            proc.Start();
+            proc.WaitForExit();
+            proc.Close();
+        }
     }
 }
