@@ -13,7 +13,7 @@ namespace CordialLabeling.Core
 
         public Vertex(int index)
         {
-            Index = index + 1;
+            Index = index;
             Edges = new List<Edge>();
             Neighbors = new List<Vertex>();
             Label = 0;

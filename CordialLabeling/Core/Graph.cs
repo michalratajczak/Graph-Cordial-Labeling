@@ -168,7 +168,7 @@ namespace CordialLabeling.Core
                     int i = random.Next(0, n);
                     int j = random.Next(0, n);
 
-                    if(graph.AdjacencyMatrix[i][j] != 1)
+                    if(graph.AdjacencyMatrix[i][j] != 1 && i != j)
                     {
                         graph.AdjacencyMatrix[i][j] = 1;
                         graph.AdjacencyMatrix[j][i] = 1;
@@ -274,7 +274,7 @@ namespace CordialLabeling.Core
 
             foreach(var edge in Edges)
             {
-                builder.Append($"|{edge.A.Index},{edge.B.Index}");
+                builder.Append($"|{edge.A.Index + 1},{edge.B.Index + 1}");
             }
 
             builder.Append($"|];");
@@ -289,11 +289,11 @@ namespace CordialLabeling.Core
             s.AppendLine("graph {");
             foreach(var v in Vertices)
             {
-                s.AppendLine($"\t{v.Index} [label=\"[{v.Index}]: {v.Label}\"]");
+                s.AppendLine($"\t{v.Index + 1} [label=\"[{v.Index + 1}]: {v.Label}\"]");
             }
             foreach(var e in Edges)
             {
-                s.AppendLine($"\t{e.A.Index} -- {e.B.Index} [label={e.Label} constraint=true]");
+                s.AppendLine($"\t{e.A.Index + 1} -- {e.B.Index + 1} [label={e.Label} constraint=true]");
             }
             s.AppendLine("}");
 
@@ -307,11 +307,11 @@ namespace CordialLabeling.Core
             s.AppendLine("graph {");
             foreach (var v in Vertices)
             {
-                s.AppendLine($"\t{v.Index} [label=\"[{v.Index}]\"]");
+                s.AppendLine($"\t{v.Index + 1} [label=\"[{v.Index + 1}]\"]");
             }
             foreach (var e in Edges)
             {
-                s.AppendLine($"\t{e.A.Index} -- {e.B.Index}");
+                s.AppendLine($"\t{e.A.Index + 1} -- {e.B.Index + 1}");
             }
             s.AppendLine("}");
 
@@ -335,7 +335,7 @@ namespace CordialLabeling.Core
             proc.Start();
             string result = proc.StandardOutput.ReadLine();
 
-            if(String.IsNullOrEmpty(result))
+            if(String.IsNullOrEmpty(result) || result == "=====UNSATISFIABLE=====")
             {
                 throw new Exception("Can't solve!");
             }
@@ -347,14 +347,14 @@ namespace CordialLabeling.Core
             return result;
         }
 
-        public void ExecuteGraphviz()
+        public void ExecuteGraphviz(string fileName)
         {
             var proc = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = ".\\Graphviz\\bin\\dot.exe",
-                    Arguments = "-Tpng .\\Temp\\graph.gv -o .\\Result\\graph.png",
+                    Arguments = "-Tpng .\\Temp\\graph.gv -o .\\Result\\" + fileName,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true

@@ -68,14 +68,16 @@ namespace CordialLabeling
                 Graph.UpdateVerticesLabel();
                 Graph.ExportToGraphvizFileWithLabels();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
                 Graph.ExportToGraphvizFile();
             }
 
-            Graph.ExecuteGraphviz();
-            FileInfo fileInfo = new FileInfo("Result\\graph.png");
+            string fileName = $"{Graph.N}-{Graph.K}-{System.IO.Path.GetRandomFileName().Replace('.', 'x')}.png";
+
+            Graph.ExecuteGraphviz(fileName);
+            FileInfo fileInfo = new FileInfo($"Result\\{fileName}");
             Image.Source = new BitmapImage(new Uri(fileInfo.FullName));
             OpenGraph.IsEnabled = true;
 

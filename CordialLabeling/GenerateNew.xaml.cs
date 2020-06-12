@@ -40,6 +40,7 @@ namespace CordialLabeling
 
         private void Gnk_Click(object sender, RoutedEventArgs e)
         {
+            K = K > N * (N - 1) / 2 ? N * (N - 1) / 2 : K;
             Graph = Graph.Generate(N, K, IsConnected);
             Close();
         }

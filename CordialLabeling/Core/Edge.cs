@@ -13,7 +13,7 @@ namespace CordialLabeling.Core
 
         public Edge(int index, Vertex a, Vertex b)
         {
-            Index = index + 1;
+            Index = index;
             A = a;
             B = b;
         }
