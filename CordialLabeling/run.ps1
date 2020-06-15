@@ -16,7 +16,7 @@ solve satisfy;
 
 output [show(vertices)];"
 
-Start-Process -FilePath "dotnet" -ArgumentList "publish -p:PublishSingleFile=true -r win-x64 -c Release -o `"..\App`"" -WindowStyle Hidden -Wait
+Start-Process -FilePath "dotnet" -ArgumentList "publish -p:PublishSingleFile=true -r win-x64 -c Release -o `"..\App`"" -WindowStyle Hidden
 
 'Graphviz', 'MiniZinc', 'Model', 'Result', 'Temp' | ForEach {New-Item -ItemType Directory -Path "..\App\$_"}
 
