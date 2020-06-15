@@ -11,7 +11,7 @@ A cordial labeled graph has to have assigned labels from the set {0, 1} for each
  1. Git clone this repository.
  2. Run "/CordialLabeling/run.ps1" script.
  3. Copy the contents of the directories in which MiniZinc and Graphviz applications have been installed to the corresponding directories in the "../App" directory.
-### Example of input file
+### Example of input file:
 - Adjacency matrix (*.txt):
 ```
 0 1 1 0 0 1 0 
