@@ -20,4 +20,4 @@ Start-Process -FilePath "dotnet" -ArgumentList "publish -p:PublishSingleFile=tru
 
 'Graphviz', 'MiniZinc', 'Model', 'Result', 'Temp' | ForEach {New-Item -ItemType Directory -Path "..\App\$_"}
 
-$ModelCode | Out-File -FilePath "..\App\Model\CordialLabeling.mzn" -Encoding utf8
+$ModelCode | Out-File -FilePath "..\App\Model\CordialLabeling.mzn" -Encoding Ascii
